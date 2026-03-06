@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="static/signup.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="static/graduation-hat.png" type="image/x-icon" />
+    <meta http-equiv="X-UA-Compatible" content="IE=7" />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+  </head>
+  <body>
+    <h1 class="headline">
+      🎓 <strong><span>Edu</span></strong
+      >Xchange
+    </h1>
+    <div class="container">
+      <h2>Create Your Account</h2>
+      <p>It's Free and Only takes a minute</p>
+      <input id="signup-username" placeholder="Username" type="text" /><br />
+      <input id="signup-email" placeholder="Email Address" type="email" /><br />
+      <input
+        id="signup-password"
+        placeholder="Password"
+        type="password"
+      /><br />
+      <input
+        id="signup-confirm"
+        placeholder="Confirm Password"
+        type="password"
+      /><br />
+      <button onclick="signup()">Sign Up</button>
+      <small>
+        By Clicking the Sign Up Button, you agree to our
+        <a href="#">Term & Condition</a> and
+        <a href="#">Privacy Policy</a>
+      </small>
+      <p>Already have an account? <a href="login.html">Log in</a></p>
+    </div>
+    <a href="index.html" style="color: aliceblue">Back To Homepage</a>
+    <script>
+      async function signup() {
+        const username = document
+          .getElementById("signup-username")
+          .value.trim();
+        const email = document.getElementById("signup-email").value.trim();
+        const password = document.getElementById("signup-password").value;
+        const confirm = document.getElementById("signup-confirm").value;
+
+        if (!username || !email || !password || !confirm) {
+          alert("Please fill in all fields");
+          return;
+        }
+
+        if (password !== confirm) {
+          alert("Passwords do not match");
+          return;
+        }
+
+        const res = await fetch("api/signup.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username: username,
+            email: email,
+            password: password,
+          }),
+        });
+
+        const data = await res.json();
+        if (data.status === "success") {
+          alert("Signup successful!");
+          window.location.href = "login.html";
+        } else {
+          alert(data.message || "Signup failed");
+        }
+      }
+
+      // Fade in when the page loads
+      document.body.classList.add("fade-in");
+
+      // Intercept all internal links for fade-out transition
+      document.querySelectorAll("a[href]").forEach((link) => {
+        const url = link.getAttribute("href");
+        if (!url.startsWith("http")) {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+            document.body.classList.remove("fade-in");
+            document.body.classList.add("fade-out");
+            setTimeout(() => {
+              window.location.href = url;
+            }, 300); // Delay should match fadeOut animation
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
