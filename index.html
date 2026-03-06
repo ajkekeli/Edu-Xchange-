@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduXchange | Learn. Share. Grow.</title>
+    <link rel="stylesheet" href="static/index.css" />
+  </head>
+
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+      <div class="container nav-container">
+        <h1 class="headline">
+          🎓 <strong><span>Edu</span></strong
+          >Xchange
+        </h1>
+        <input type="checkbox" id="menu-toggle" />
+        <label for="menu-toggle" class="hamburger">&#9776;</label>
+        <ul class="nav-menu">
+          <li><a href="login.html" class="login-btn">Login</a></li>
+          <li><a href="signup.html" class="login-btn">Signup</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+      <div class="container hero-content">
+        <div class="hero-text">
+          <h2>Welcome to EduXchange</h2>
+          <p>
+            A student powered learning platform where knowledge meets
+            collaboration. Ask questions, share notes, or get tutored at your
+            pace, your way.
+          </p>
+          <a href="login.html" class="login-btn">Get Started</a>
+        </div>
+        <div class="hero-image">
+          <img src="static/image.jpg" alt="Students studying" />
+        </div>
+      </div>
+    </header>
+
+    <!-- Mission Section -->
+    <section class="mission">
+      <div class="container">
+        <h2>Our Mission</h2>
+        <p>
+          EduXchange exists to empower students through shared resources and
+          community-driven academic support. We believe that learning is most
+          effective when it's collaborative, accessible, and engaging.
+        </p>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+      <div class="container">
+        <h2>How It Works</h2>
+        <div class="steps">
+          <div class="step">
+            <h3>1. Upload</h3>
+            <p>Share your notes, slides, and learning materials with others.</p>
+          </div>
+          <div class="step">
+            <h3>2. Ask</h3>
+            <p>Have questions? Post them and get help from peers and tutors.</p>
+          </div>
+          <div class="step">
+            <h3>3. Learn</h3>
+            <p>Get explanations, tutoring, and access resources anytime.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="why-us">
+      <div class="container">
+        <h2>Why Choose EduXchange?</h2>
+        <ul>
+          <li>. 100% student-focused platform</li>
+          <li>. Access both free and paid help</li>
+          <li>. Learn from real questions asked by real students</li>
+          <li>. Easy-to-use interface with mobile support</li>
+          <li>. Safe and moderated space for learning</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+      <div class="container">
+        <h2>What Students Say</h2>
+        <div class="testimonial-box">
+          <p>
+            "EduXchange helped me prepare for my finals with notes I couldn’t
+            find anywhere else!"
+          </p>
+          <span> Nathaniel, Level 200 Student</span>
+        </div>
+        <div class="testimonial-box">
+          <p>
+            "Being able to request tutoring directly saved me from failing
+            Calculus!"
+          </p>
+          <span>Daniel, Level 300 Student</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq">
+      <div class="container">
+        <h2>FAQs</h2>
+        <div class="faq-item">
+          <h4>Is EduXchange free?</h4>
+          <p>
+            Yes.You can access free resources and ask questions for free. Some
+            tutoring sessions may require payment.
+          </p>
+        </div>
+        <div class="faq-item">
+          <h4>Who can upload resources?</h4>
+          <p>Any registered student can upload documents, notes, or slides.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer / Contact Section -->
+    <footer class="footer">
+      <div class="container">
+        <h2>Contact & Support</h2>
+        <p>
+          📧 Email:
+          <a href="mailto:support@eduxchange.com">support@eduxchange.com</a>
+        </p>
+        <p>📞 Phone: +233 59 372 6170</p>
+        <p>📩 Need help? Reach out to our support team anytime.</p>
+      </div>
+    </footer>
+    <script>
+      // Fade in when the page loads
+      document.body.classList.add("fade-in");
+
+      // Intercept all internal links for fade-out transition
+      document.querySelectorAll("a[href]").forEach((link) => {
+        const url = link.getAttribute("href");
+        if (!url.startsWith("http")) {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+            document.body.classList.remove("fade-in");
+            document.body.classList.add("fade-out");
+            setTimeout(() => {
+              window.location.href = url;
+            }, 300); // Delay should match fadeOut animation
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
