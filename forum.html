@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>🎓Discussion Page</title>
+    <link rel="stylesheet" href="static/style.css" />
+    <link rel="icon" href="static/graduation-hat.png" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <header>
+      <div class="topthere">
+        <h1 class="headline">
+          🎓 <strong><span class="spaniard">Edu</span></strong
+          >Xchange
+        </h1>
+        
+          <input
+          class="search-bar"
+            id="search-input"
+            placeholder="Search questions..."
+            oninput="searchQuestions()"
+          />
+        
+      </div>
+      <nav>
+        <a href="forum.html"><button>Home</button></a>
+        <a href="resources.html"><button>📑Resources</button></a>
+        <a href="ask.html"><button>❔Request-Assistance</button></a>
+        <div class="user-dropdown">
+          <span id="user-name">👤: John Doe</span>
+          <div id="dropdown-menu" class="dropdown hidden">
+            <div class="dropdown-item" id="dname">
+              Logged in as <strong>John Doe</strong>
+            </div>
+            <div class="dropdown-item" onclick="logout()">⛔️Logout</div>
+            <button onclick="toggleTheme()">⚫️</button>
+          </div>
+        </div>
+        <a href="admin.html" id="admin-link" class="hidden"
+          >🛠 Admin Panel</a
+        >
+      </nav>
+    </header>
+
+    <div class="mainsection">
+      <div class="left-panel">
+        <h2>📳 FEED</h2>
+        <div id="questions-container" class="qc"></div>
+      </div>
+      <div class="right-panel">
+        <div class="question-form">
+          <h2>📄Got A question On Your Mind?</h2>
+          <input id="q-title" placeholder="Title" required /> <br />
+          <input id="q-body" placeholder="Your question" /> <br />
+          <button id="post-question-btn">Post Question</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="static/script.js"></script>
+    <script>
+      fetch("api/session.php")
+        .then((res) => res.json())
+        .then((data) => {
+          if (!data.logged_in) {
+            window.location.href = "login.html";
+          } else {
+            document.getElementById(
+              "user-name"
+            ).textContent = `👤: ${data.username}`;
+            document.getElementById(
+              "dname"
+            ).textContent = `Logged in as ${data.username}`;
+
+            // ✅ Show admin link if user is admin
+            if (data.is_admin == 1) {
+              document.getElementById("admin-link").classList.remove("hidden");
+            }
+          }
+        });
+
+      window.onload = () => {
+        if (localStorage.getItem("theme") === "futuristic") {
+          document.body.classList.add("futuristic");
+        }
+      };
+
+      function toggleTheme() {
+        document.body.classList.toggle("futuristic");
+        const isFuturistic = document.body.classList.contains("futuristic");
+        localStorage.setItem("theme", isFuturistic ? "futuristic" : "light");
+      }
+
+      // Fade in when the page loads
+      document.body.classList.add("fade-in");
+
+      // Intercept all internal links for fade-out transition
+      document.querySelectorAll("a[href]").forEach((link) => {
+        const url = link.getAttribute("href");
+        if (!url.startsWith("http")) {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+            document.body.classList.remove("fade-in");
+            document.body.classList.add("fade-out");
+            setTimeout(() => {
+              window.location.href = url;
+            }, 300); // Delay should match fadeOut animation
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

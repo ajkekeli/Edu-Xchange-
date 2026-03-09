@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="static/ask.css" />
+    <title>Assistance</title>
+  </head>
+  <body>
+    <header>
+      <div class="topthere">
+        <h1 class="headline">
+          🎓 <strong><span class="spaniard">Edu</span></strong
+          >Xchange
+        </h1>
+      </div>
+      <nav>
+        <a href="forum.html"><button>Home</button></a>
+        <a href="resources.html"><button>📑Resources</button></a>
+        <a href="ask.html"><button>❔Request-Assistance</button></a>
+        <div class="user-dropdown">
+          <span id="user-name">👤: John Doe</span>
+          <div id="dropdown-menu" class="dropdown hidden">
+            <div class="dropdown-item" id="dname">
+              Logged in as <strong>John Doe</strong>
+            </div>
+            <div class="dropdown-item" onclick="logout()">⛔️Logout</div>
+            <button onclick="toggleTheme()">⚫️</button>
+          </div>
+        </div>
+        <a href="admin.html" id="admin-link" class="hidden">🛠 Admin Panel</a>
+      </nav>
+    </header>
+    <div class="mainsection">
+      <div class="left-panel">
+        <h2>📥 Incoming Requests</h2>
+        <div id="requests-container"></div>
+      </div>
+
+      <div class="right-panel">
+        <h2>🆘 Submit Private Help Request</h2>
+        <form id="help-form">
+          <input
+            type="text"
+            name="subject"
+            placeholder="Subject"
+            required
+          /><br />
+          <textarea
+            name="description"
+            placeholder="Describe your issue..."
+            required
+          ></textarea
+          ><br />
+          <input
+            type="email"
+            name="contact_email"
+            placeholder="Your Email for Contact"
+            required
+          /><br />
+          <button type="submit">Request Help</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      fetch("api/session.php")
+        .then((res) => res.json())
+        .then((data) => {
+          if (!data.logged_in) {
+            window.location.href = "login.html";
+          } else {
+            document.getElementById(
+              "user-name"
+            ).textContent = `👤: ${data.username}`;
+            document.getElementById(
+              "dname"
+            ).textContent = `Logged in as ${data.username}`;
+
+            // ✅ Show admin link if user is admin
+            if (data.is_admin == 1) {
+              document.getElementById("admin-link").classList.remove("hidden");
+            }
+          }
+        });
+
+      async function loadRequests() {
+        const res = await fetch("api/get_help_requests.php");
+        const data = await res.json();
+        const container = document.getElementById("requests-container");
+        container.innerHTML = "";
+
+        data.forEach((req) => {
+          const div = document.createElement("div");
+          div.innerHTML = `
+          <h3>TOPIC: ${req.subject}</h3>
+          <p>📳 : ${req.description}</p>
+          <small>From: ${req.username} | Contact: ${req.contact_email}</small>
+
+          <hr>
+        `;
+          container.appendChild(div);
+        });
+      }
+
+      async function submitHelpRequest(event) {
+        event.preventDefault();
+        const form = document.getElementById("help-form");
+        const formData = new FormData(form);
+        const res = await fetch("api/post_help_request.php", {
+          method: "POST",
+          body: formData,
+        });
+        const text = await res.text();
+        alert(text);
+        form.reset();
+        loadRequests();
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        document
+          .getElementById("help-form")
+          .addEventListener("submit", submitHelpRequest);
+        loadRequests();
+      });
+
+      document.addEventListener("click", function (e) {
+        const dropdown = document.getElementById("dropdown-menu");
+        const trigger = document.getElementById("user-name");
+
+        if (trigger && trigger.contains(e.target)) {
+          dropdown.classList.toggle("hidden");
+        } else if (!dropdown.contains(e.target)) {
+          dropdown.classList.add("hidden");
+        }
+      });
+
+      window.onload = () => {
+        if (localStorage.getItem("theme") === "futuristic") {
+          document.body.classList.add("futuristic");
+        }
+      };
+
+      function toggleTheme() {
+        document.body.classList.toggle("futuristic");
+        const isFuturistic = document.body.classList.contains("futuristic");
+        localStorage.setItem("theme", isFuturistic ? "futuristic" : "light");
+      }
+
+      async function logout() {
+        await fetch("api/logout.php");
+        window.location.href = "index.html";
+      }
+    </script>
+  </body>
+</html>

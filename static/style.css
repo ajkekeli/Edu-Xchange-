@@ -1,0 +1,271 @@
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap");
+
+:root {
+  --bg: #f4f4f4;
+  --card-bg: #ffffff;
+  --text: #000;
+  --accent: #007bff;
+  --headline: blue;
+  --reply-bg: white;
+  --button-bg: #007bff;
+  --button-text: white;
+  --input-bg: white;
+  --input-border: #ccc;
+}
+
+body.futuristic {
+  --bg: linear-gradient(to right, #457b9d, #1d3557);
+  --card-bg: #1d3557;
+  --text: #e0e0e0;
+  --accent: #00f6ff;
+  --headline: #fca311;
+  --reply-bg: rgba(255, 255, 255, 0.08);
+  --button-bg: #fca311;
+  --button-text: #000;
+  --input-bg: #1e1e2f;
+  --input-border: #fca311;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s, color 0.3s;
+}
+
+body.fade-in {
+  animation: fadeInPage 0.5s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInPage {
+  to {
+    opacity: 1;
+  }
+}
+
+body.fade-out {
+  animation: fadeOutPage 0.4s ease forwards;
+}
+
+@keyframes fadeOutPage {
+  to {
+    opacity: 0;
+  }
+}
+
+header {
+  background-color: var(--card-bg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  margin: 0;
+  color: var(--accent);
+  text-shadow: 0 0 5px var(--accent);
+}
+
+.topthere {
+  display: flex;
+  justify-content: right;
+}
+
+.spaniard {
+  text-decoration: overline;
+  color: rgb(128, 230, 26);
+}
+
+.headline {
+  color: var(--headline);
+  text-shadow: 0 0 3px var(--accent);
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+nav a {
+  color: var(--text);
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+nav a:hover {
+  color: var(--accent);
+}
+
+nav a.active {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.user-dropdown {
+  position: relative;
+  cursor: pointer;
+}
+
+#user-name {
+  font-weight: 500;
+}
+
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: 30px;
+  background: var(--reply-bg);
+  color: black;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 160px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.dropdown-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background: #f5f5f5;
+}
+
+.hidden {
+  display: none;
+}
+.search-bar{
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text);
+  padding: 8px;
+  transition: all 0.3s ease;
+  margin-left: 30px;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+input,
+textarea,
+.searchbox {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text);
+  padding: 8px;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+}
+
+input:focus,
+textarea:focus,
+.searchbox:focus {
+  outline: none;
+}
+
+input {
+  width: 30%;
+  margin: 10px 0;
+}
+
+textarea {
+  width: 30%;
+  margin: 50px 0 10px;
+}
+
+.searchbox {
+  width: 100px;
+  margin-left: 10px;
+}
+
+list {
+  list-style-type: none;
+  margin-right: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  background: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+button:hover {
+  cursor: pointer;
+  box-shadow: 0px 4px 8px rgb(0, 0, 0);
+  transform: scale(1.05);
+}
+
+.reply {
+  background: var(--reply-bg);
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 5px;
+}
+
+.reply-form {
+  margin-top: 10px;
+}
+
+.mainsection {
+  display: flex;
+  height: 90vh;
+  padding: 20px;
+  gap: 30px;
+  background: transparent;
+}
+
+.left-panel,
+.right-panel {
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow-y: auto;
+}
+
+.left-panel {
+  flex: 2;
+}
+
+.right-panel {
+  flex: 1;
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+  color: Black;
+}
+
+.question {
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgb(199, 199, 199);
+}

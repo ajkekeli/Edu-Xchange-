@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>📚 EduXchange Resources</title>
+    <link rel="stylesheet" href="static/resources.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      #user-name {
+        cursor: pointer;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="topthere">
+        <h1 class="headline">
+          🎓 <strong><span class="spaniard">Edu</span></strong
+          >Xchange
+        </h1>
+      </div>
+      <nav>
+        <a href="forum.html"><button>Home</button></a>
+        <a href="resources.html"><button>📑Resources</button></a>
+        <a href="ask.html"><button>❔Request-Assistance</button></a>
+        <div class="user-dropdown">
+          <span id="user-name">👤: John Doe</span>
+          <div id="dropdown-menu" class="dropdown hidden">
+            <div class="dropdown-item" id="dname">
+              Logged in as <strong>John Doe</strong>
+            </div>
+            <div class="dropdown-item" onclick="logout()">⛔️Logout</div>
+            <button onclick="toggleTheme()">⚫️</button>
+          </div>
+        </div>
+        <a href="admin.html" id="admin-link" class="hidden">🛠 Admin Panel</a>
+      </nav>
+    </header>
+
+    <div class="mainsection">
+      <div class="left-panel">
+        <h2>📂 Available Resources</h2>
+        <div id="resources-container"></div>
+      </div>
+
+      <div class="right-panel">
+        <h2>📤 Upload a New Resource</h2>
+        <form id="resource-form" enctype="multipart/form-data">
+          <input
+            type="text"
+            name="title"
+            placeholder="Resource Title"
+            required
+          /><br />
+          <textarea
+            name="description"
+            placeholder="Brief description..."
+          ></textarea
+          ><br />
+          <input
+            type="file"
+            name="resource_file"
+            accept=".pdf,.doc,.docx"
+            required
+          /><br />
+          <button type="submit">Upload</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      async function loadResources() {
+        const res = await fetch("api/get_resources.php");
+        const data = await res.json();
+        const container = document.getElementById("resources-container");
+        container.innerHTML = "";
+
+        data.forEach((resource) => {
+          const div = document.createElement("div");
+          div.innerHTML = `
+            <h3>📚: ${resource.title}</h3>
+            <p>✍🏼:  ${resource.description}</p>
+            <a href="${resource.file_path}" target="_blank">⬇️Download</a>
+            <hr>
+          `;
+          container.appendChild(div);
+        });
+      }
+
+      async function uploadResource(event) {
+        event.preventDefault();
+
+        const form = document.getElementById("resource-form");
+        const formData = new FormData(form);
+
+        const res = await fetch("api/upload_resource.php", {
+          method: "POST",
+          body: formData,
+        });
+
+        const text = await res.text();
+        alert(text);
+
+        await loadResources();
+        form.reset();
+      }
+
+      function toggleTheme() {
+        document.body.classList.toggle("futuristic");
+        const isFuturistic = document.body.classList.contains("futuristic");
+        localStorage.setItem("theme", isFuturistic ? "futuristic" : "light");
+      }
+
+      function init() {
+        // Theme setup
+        if (localStorage.getItem("theme") === "futuristic") {
+          document.body.classList.add("futuristic");
+        }
+
+        // Auth check
+        fetch("api/session.php")
+          .then((res) => res.json())
+          .then((data) => {
+            if (!data.logged_in) {
+              window.location.href = "login.html";
+            } else {
+              document.getElementById(
+                "user-name"
+              ).textContent = `👤: ${data.username}`;
+              document.getElementById(
+                "dname"
+              ).textContent = `Logged in as ${data.username}`;
+
+              // ✅ Show admin link if user is admin
+              if (data.is_admin == 1) {
+                document
+                  .getElementById("admin-link")
+                  .classList.remove("hidden");
+              }
+            }
+          });
+
+        // Bind upload form
+        document
+          .getElementById("resource-form")
+          .addEventListener("submit", uploadResource);
+        loadResources();
+      }
+
+      document.addEventListener("DOMContentLoaded", init);
+
+      // Intercept all internal links for fade-out transition
+      document.querySelectorAll("a[href]").forEach((link) => {
+        const url = link.getAttribute("href");
+        if (!url.startsWith("http")) {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+            document.body.classList.remove("fade-in");
+            document.body.classList.add("fade-out");
+            setTimeout(() => {
+              window.location.href = url;
+            }, 300);
+          });
+        }
+      });
+
+      // ✅ Fixed dropdown toggle logic
+      document.addEventListener("click", function (e) {
+        const trigger = document.getElementById("user-name");
+        const dropdown = document.getElementById("dropdown-menu");
+
+        if (!trigger || !dropdown) return;
+
+        if (trigger.contains(e.target)) {
+          dropdown.classList.toggle("hidden");
+        } else if (!dropdown.contains(e.target)) {
+          dropdown.classList.add("hidden");
+        }
+      });
+
+      // ✅ Working logout
+      async function logout() {
+        await fetch("api/logout.php");
+        window.location.href = "index.html";
+      }
+    </script>
+  </body>
+</html>
